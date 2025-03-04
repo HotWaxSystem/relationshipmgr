@@ -1,0 +1,34 @@
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+      <service verb="delete" noun="ContactMechPurpose">
+        <in-parameters>
+            <parameter name="contactMechPurposeId"/>
+        </in-parameters>
+        <actions>
+            <entity-find-one entity-name="moqui.contactmechpurpose.ContactMechPurpose" value-field="contactMechPurposeList">
+                <field-map field-name="contactMechPurposeId" from="context.contactMechPurposeId"/>
+            </entity-find-one>
+            <if condition="contactMechPurposeList != null">
+                <entity-delete-related value-field="contactMechPurposeList" relationship-name="PartyContactMech"/>
+              
+                <entity-delete value-field="contactMechPurposeList"/>
+                <else>
+                    <message>Object does not exists</message>
+                </else>
+            </if>
+        </actions>
+    </service>
+
+    <service verb="fetch" noun="ContactMechPurpose">
+        <in-parameters>
+            <parameter name="contactMechPurposeId" entity-name="moqui.contactmechpurpose.ContactMechPurpose"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="contactMechPurposeList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="moqui.contactmechpurpose.ContactMechPurpose" list="contactMechPurposeList">
+                <econdition field-name="contactMechPurposeId" />
+            </entity-find>
+        </actions>
+    </service>
+</services>

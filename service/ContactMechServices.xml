@@ -1,0 +1,78 @@
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+      <service verb="delete" noun="ContactMech">
+        <in-parameters>
+            <parameter name="contactMechId"/>
+        </in-parameters>
+        <actions>
+            <entity-find-one entity-name="moqui.contactmech.ContactMech" value-field="contactMechList">
+                <field-map field-name="contactMechId" from="context.contactMechId"/>
+            </entity-find-one>
+            <if condition="contactMechList != null">
+                <entity-delete-related value-field="contactMechList" relationship-name="TelecomNumber"/>
+                <entity-delete-related value-field="contactMechList" relationship-name="PostalAddress"/>
+                <entity-delete-related value-field="contactMechList" relationship-name="PartyContactMech"/>
+               
+                <entity-delete value-field="contactMechList"/>
+                <else>
+                    <message>Object does not exists</message>
+                </else>
+            </if>
+        </actions>
+    </service>
+
+    <service verb="fetch" noun="ContactMech">
+        <in-parameters>
+            <parameter name="contactMechEnumId" entity-name="moqui.contactmech.ContactMech"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="contactMechList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="moqui.contactmech.ContactMech" list="contactMechList">
+                <econdition field-name="contactMechEnumId" />
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="fetch" noun="TelecomNumber">
+        <in-parameters>
+            <parameter name="contactNumber" entity-name="moqui.telecomnumber.TelecomNumber"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="telecomNumberList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="moqui.telecomnumber.TelecomNumber" list="telecomNumberList">
+                <econdition field-name="contactNumber" />
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="fetch" noun="PostalAddress">
+        <in-parameters>
+            <parameter name="postalCode" entity-name="moqui.postaladdress.PostalAddress"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="postalAddressList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="moqui.postaladdress.PostalAddress" list="postalAddressList">
+                <econdition field-name="postalCode" />
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="fetch" noun="PartyContactMech">
+        <in-parameters>
+            <parameter name="partyId" entity-name="moqui.partycontactmech.PartyContactMech"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="partyContactMechList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="moqui.partycontactmech.PartyContactMech" list="partyContactMechList">
+                <econdition field-name="partyId" />
+            </entity-find>
+        </actions>
+    </service>
+</services>

@@ -1,0 +1,67 @@
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/moqui-conf-3.xsd">
+    <entity entity-name="ContactMech" package="moqui.contactmech">
+        <field name="contactMechId" type="id" is-pk="true"/>
+        <field name="contactMechEnumId" type="id"/>
+        <field name="infoString" type="text-medium"/>
+        <relationship type="one-nofk" related="moqui.telecomnumber.TelecomNumber"/>
+        <relationship type="one-nofk" related="moqui.postaladdress.PostalAddress"/>
+        <relationship type="one" related="moqui.basic.Enumeration" title="contactMechType">
+            <key-map field-name="contactMechEnumId" />
+        </relationship>
+        <seed-data>
+            <moqui.basic.EnumerationType description="Contact Mech Type" enumTypeId="contactMechType" />
+            <moqui.basic.Enumeration description="EmailAddress" enumId="EmailAddress" enumTypeId="contactMechType" />
+            <moqui.basic.Enumeration description="PostalAddress" enumId="PostalAddress" enumTypeId="contactMechType" />
+            <moqui.basic.Enumeration description="TelecomAddress" enumId="TelecomAddress" enumTypeId="contactMechType" />
+        </seed-data>
+    </entity>
+
+    <!-- TelecomNumber Table-->
+    <entity entity-name="TelecomNumber" package="moqui.telecomnumber">
+        <field name="contactMechId" type="id" is-pk="true"/>
+        <field name="countryCode" type="text-short" />
+        <field name="areaCode" type="text-short" />
+        <field name="contactNumber" type="text-short" />
+        <relationship type="one" related="moqui.contactmech.ContactMech">
+            <key-map field-name="contactMechId" related="contactMechId" />
+        </relationship>
+    </entity>
+
+    <!-- PostalAddress Table-->
+    <entity entity-name="PostalAddress" package="moqui.postaladdress">
+        <field name="contactMechId" type="id" is-pk="true" />
+        <field name="toName" type="text-medium" />
+        <field name="attnName" type="text-medium" />
+        <field name="address1" type="text-medium" />
+        <field name="address2" type="text-medium" />
+        <field name="city" type="text-medium" />
+        <field name="state" type="text-medium"/>
+        <field name="country" type="text-medium"/>
+        <field name="postalCode" type="text-short" />
+        <relationship type="one" related="moqui.contactmech.ContactMech">
+            <key-map field-name="contactMechId" related="contactMechId" />
+        </relationship>
+    </entity>
+
+    <entity entity-name="ContactMechPurpose" package="moqui.contactmechpurpose">
+        <field name="contactMechPurposeId" type="id" is-pk="true"/>
+        <field name="description" type="text-medium"/>
+    </entity>
+
+    <entity entity-name="PartyContactMech" package="moqui.partycontactmech">
+        <field name="partyId" type="id"  is-pk="true"/>
+        <field name="contactMechId" type="id" is-pk="true"/>
+        <field name="contactMechPurposeId" type="id" is-pk="true"/>
+        <field name="fromDate" type="date" is-pk="true"/>
+        <relationship type="one" related="moqui.party.Party">
+            <key-map field-name="partyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" related="moqui.contactmech.ContactMech">
+            <key-map field-name="contactMechId" related="contactMechId"/>
+        </relationship>
+        <relationship type="one" related="moqui.contactmechpurpose.ContactMechPurpose">
+            <key-map field-name="contactMechPurposeId" related="contactMechPurposeId" />
+        </relationship>
+    </entity>
+</entities>
